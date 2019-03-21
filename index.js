@@ -36,7 +36,7 @@ class ServerlessPlugin {
 
                 if (!fs.existsSync(dependency.storage)) {
                     this.serverless.cli.log(`Fetching dependency ${dependency.name}...`);
-                    exec(`git clone ${dependency.git} ${dependency.storage}`, async (error, stdout, stderr) => {
+                    exec(`git clone --single-branch --branch ${dependency.branch} ${dependency.git} ${dependency.storage}`, async (error, stdout, stderr) => {
                         if (error) {
                             reject(error);
                         }
