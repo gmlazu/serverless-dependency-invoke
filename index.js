@@ -154,11 +154,17 @@ const functionProxy = (dependency, location) => ({
 
 const execPromise = (command) => {
     return new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error) reject(error);
+        const childProcess = exec(command, (error, stdout, stderr) => {
+            if (error || stderr) reject(error);
             resolve(stdout)
         });
+
+        childProcess.on('exit', function (code) {
+            if (code === 0) resolve(code)
+            else reject(code)
+        })
     });
 };
+
 
 module.exports = ServerlessPlugin;
